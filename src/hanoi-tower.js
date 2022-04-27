@@ -15,9 +15,11 @@ const { NotImplementedError } = require('../extensions/index.js');
  *
  */
 function calculateHanoi(disksNumber, turnsSpeed) {
+  let turn = 2 ** disksNumber - 1
+  let sec = Math.floor((2 ** disksNumber - 1) / turnsSpeed * 3600)
   return {
-    turns: `${2 ** disksNumber - 1}`,
-    seconds: `${Math.floor((2 ** disksNumber - 1) / turnsSpeed * 3600)}`
+    turns: turn,
+    seconds: sec
   }
 }
 
