@@ -15,61 +15,47 @@ const { NotImplementedError } = require('../extensions/index.js');
  * => 'STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS'
  *
  */
+
+
 function repeater(str, options) {
-  let newStr = ''
-  let answer = ''
-  let basicRepeter = ''
+  str = String(str);
+  options.hasOwnProperty("addition")
+    ? (options.addition = String(options.addition))
+    : false;
 
-  if (typeof str !== 'string') str = String(str)
-
-  // if (!options.hasOwnProperty('additionSeparator')) {
-  //   options['additionSeparator'] = '|'
-  // }
-
-  if (!options.hasOwnProperty('separator')) {
-    options.separator = '+'
-  } 
-  
-
-  if (options.hasOwnProperty('addition')) {
-    basicRepeter += options['addition']
+  if (!options.hasOwnProperty("additionSeparator")) {
+    options.additionSeparator = "|";
   }
 
-
-  if (options.hasOwnProperty('additionSeparator')) {
-    basicRepeter += options['additionSeparator']
+  if (!options.hasOwnProperty("separator")) {
+    options.separator = "+";
   }
 
-  if (options.hasOwnProperty('separator')) {
-    newStr += str
+  let basicRepeater = (options.addition || "") + options.additionSeparator;
+  let finalRepeater = str;
+  let newStr = "";
 
-    while (newStr.length < basicRepeter.length * options['additionRepeatTimes'] + str.length) {
-      newStr += basicRepeter
+  if (options.hasOwnProperty("additionRepeatTimes")) {
+    for (let i = 0; i < options.additionRepeatTimes; i++) {
+      finalRepeater += basicRepeater;
     }
-    if (options['additionSeparator']) {
-      let cut = options['additionSeparator'].length
-      newStr = newStr.slice(0, -cut)
+    finalRepeater = finalRepeater.slice(0, -options.additionSeparator.length);
+  } else {
+    finalRepeater += basicRepeater.slice(0, -options.additionSeparator.length);
+  }
+
+  if (options.hasOwnProperty("repeatTimes")) {
+    for (let i = 0; i < options.repeatTimes; i++) {
+      newStr += finalRepeater + options.separator;
     }
-    newStr += options['separator']
+    newStr = newStr.slice(0, -options.separator.length);
+  } else {
+    newStr = finalRepeater 
   }
 
-  if (options.hasOwnProperty('repeatTimes')) {
-    while (answer.length < newStr.length * options['repeatTimes']) {
-      answer += newStr
-    }
-    let cut = options['separator'].length
-    answer = answer.slice(0, -cut)
-  }
-
-  if (!options.hasOwnProperty('repeatTimes')) {
-    str += basicRepeter
-    let cut = options['additionSeparator'].length
-    str = str.slice(0, -cut)
-    return str
-  }
-
-  return answer
+  return newStr;
 }
+
 
 module.exports = {
   repeater
